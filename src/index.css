@@ -1,0 +1,19 @@
+@import "tailwindcss";
+.logo-slider {
+  width: max-content;
+  animation: slide-left 18s linear infinite;
+  animation-delay: 5s;
+}
+
+.logo-slider:hover {
+  animation-play-state: paused;
+}
+
+@keyframes slide-left {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
