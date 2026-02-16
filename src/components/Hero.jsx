@@ -3,6 +3,8 @@ import AOS from "aos";
 import "aos/dist/aos.css";
 
 const HireMeHero = () => {
+  const [submitted, setSubmitted] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -12,7 +14,7 @@ const HireMeHero = () => {
   });
 
   useEffect(() => {
-    AOS.init({ duration: 800, once: true });
+    AOS.init({ duration: 800, once: true, offset: 120 });
   }, []);
 
   const handleChange = (e) => {
@@ -21,7 +23,11 @@ const HireMeHero = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Thank you! Our team will contact you shortly.");
+
+    // ✅ show success message (no alert)
+    setSubmitted(true);
+
+    // ✅ clear form
     setFormData({
       name: "",
       mobile: "",
@@ -29,6 +35,9 @@ const HireMeHero = () => {
       company: "",
       message: "",
     });
+
+    // ✅ auto hide message
+    setTimeout(() => setSubmitted(false), 3000);
   };
 
   return (
@@ -91,6 +100,18 @@ const HireMeHero = () => {
             w-full max-w-lg mx-auto
           "
         >
+          {/* ✅ SUCCESS MESSAGE */}
+          {submitted && (
+            <div className="mb-5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-center">
+              <p className="font-bold text-indigo-900">
+                Message Sent Successfully ✅
+              </p>
+              <p className="text-sm text-indigo-700 mt-1">
+                Our team will contact you shortly.
+              </p>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-5">
             <Input
               label="Full Name"
@@ -161,7 +182,7 @@ const HireMeHero = () => {
                 transition
               "
             >
-              Send Message
+              {submitted ? "Sent ✅" : "Send Message"}
             </button>
           </form>
         </div>

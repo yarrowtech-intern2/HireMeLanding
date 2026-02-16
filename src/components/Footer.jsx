@@ -14,8 +14,19 @@ const Footer = () => {
     });
   };
 
-  const mapSearchUrl =
-    "https://www.google.com/maps/search/?api=1&query=3A%20Bertram%20St%2C%20Esplanade%2C%20Dharmatala%2C%20Taltala%2C%20Kolkata%2C%20West%20Bengal%20700087";
+  // ✅ Exact Location
+  const officeAddress =
+    "3A, Bertram St, Esplanade, Dharmatala, Taltala, Kolkata, West Bengal 700087";
+
+  // ✅ Google Maps open link
+  const mapSearchUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(
+    officeAddress
+  )}`;
+
+  // ✅ Safe Embed URL (Best)
+  const embedMapUrl = `https://www.google.com/maps/embed?output=embed&q=${encodeURIComponent(
+    officeAddress
+  )}`;
 
   return (
     <footer className="bg-black text-gray-400 px-4 sm:px-6 py-12">
@@ -29,10 +40,12 @@ const Footer = () => {
       >
         {/* Brand */}
         <div>
-          <h3 className="text-2xl font-bold text-white mb-3">Hire Me</h3>
+          <h3 className="text-2xl font-bold text-white mb-3">
+            Electronic Educare
+          </h3>
           <p className="text-sm leading-relaxed max-w-sm mx-auto md:mx-0">
-            Hire Me connects businesses with the right talent through modern,
-            scalable, and reliable hiring solutions.
+            Electronic Educare helps students learn smarter with modern,
+            structured education support and guidance.
           </p>
         </div>
 
@@ -65,10 +78,13 @@ const Footer = () => {
 
           {/* Email */}
           <a
-            href="mailto:contact@hireme.com"
+            href="mailto:electroniceducaresales@yarrowtech.co.in"
             className="block hover:text-white transition"
           >
-            Email: <span className="text-gray-300">contact@hireme.com</span>
+            Email:{" "}
+            <span className="text-gray-300">
+              electronticeducaresales@yarrowtech.co.in
+            </span>
           </a>
 
           {/* Phone */}
@@ -79,7 +95,7 @@ const Footer = () => {
             Phone: <span className="text-gray-300">+91 9830590929</span>
           </a>
 
-          {/* Location (ONLY ONE LINE) */}
+          {/* Location */}
           <a
             href={mapSearchUrl}
             target="_blank"
@@ -88,7 +104,7 @@ const Footer = () => {
           >
             Location:{" "}
             <span className="text-gray-300">
-              3A, Bertram St, Esplanade, Dharmatala, Kolkata - 700087
+              3A, Bertram St, Esplanade, Dharmatala, Taltala, Kolkata - 700087
             </span>
           </a>
         </div>
@@ -97,26 +113,24 @@ const Footer = () => {
         <div>
           <h4 className="text-lg font-semibold text-white mb-4">Find Us</h4>
 
-          <a href={mapSearchUrl} target="_blank" rel="noreferrer">
-            <div className="w-full h-44 rounded-xl overflow-hidden border border-gray-800 shadow-md hover:opacity-90 transition">
-              <iframe
-                title="Google Map"
-                src="https://www.google.com/maps?q=3A%20Bertram%20St%2C%20Esplanade%2C%20Dharmatala%2C%20Taltala%2C%20Kolkata%2C%20West%20Bengal%20700087&output=embed"
-                width="100%"
-                height="100%"
-                style={{ border: 0 }}
-                allowFullScreen=""
-                loading="lazy"
-                referrerPolicy="no-referrer-when-downgrade"
-              ></iframe>
-            </div>
-          </a>
+          {/* ✅ FIXED MAP */}
+          <div className="w-full h-44 rounded-xl overflow-hidden border border-gray-800 shadow-md">
+            <iframe
+              title="Google Map - Electronic Educare Location"
+              src={embedMapUrl}
+              className="w-full h-full"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
         </div>
       </div>
 
       {/* Bottom */}
       <div className="border-t border-gray-800 mt-10 pt-4 text-center text-sm text-gray-500">
-        © {new Date().getFullYear()} HireME. All rights reserved.
+        © {new Date().getFullYear()} Electronic Educare. All rights reserved.
       </div>
     </footer>
   );

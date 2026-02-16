@@ -4,6 +4,8 @@ import "aos/dist/aos.css";
 import { FaEnvelope, FaPhoneAlt, FaMapMarkerAlt } from "react-icons/fa";
 
 const Contact = () => {
+  const [submitted, setSubmitted] = useState(false);
+
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -27,7 +29,11 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    alert("Thank you! Our team will contact you shortly.");
+
+    // ✅ show success (no alert)
+    setSubmitted(true);
+
+    // ✅ clear form
     setFormData({
       name: "",
       mobile: "",
@@ -35,6 +41,9 @@ const Contact = () => {
       company: "",
       message: "",
     });
+
+    // ✅ auto hide after 3 seconds
+    setTimeout(() => setSubmitted(false), 3000);
   };
 
   /* -------- Click Actions -------- */
@@ -48,7 +57,7 @@ const Contact = () => {
 
   const openAddress = () => {
     window.open(
-      "https://www.google.com/maps/search/3A,+Bertram+St,+Esplanade,+Dharmatala,+Taltala,+Kolkata,+West+Bengal+700087",
+      "https://www.google.com/maps/search/?api=1&query=3A,%20Bertram%20St,%20Esplanade,%20Dharmatala,%20Taltala,%20Kolkata,%20West%20Bengal%20700087",
       "_blank"
     );
   };
@@ -104,10 +113,7 @@ const Contact = () => {
             <div className="space-y-5 text-slate-300 text-sm sm:text-base">
               <div
                 onClick={openEmail}
-                className="
-                  flex items-start gap-3 cursor-pointer
-                  hover:text-white transition
-                "
+                className="flex items-start gap-3 cursor-pointer hover:text-white transition"
               >
                 <span className="mt-1 text-indigo-400">
                   <FaEnvelope />
@@ -119,10 +125,7 @@ const Contact = () => {
 
               <div
                 onClick={callPhone}
-                className="
-                  flex items-start gap-3 cursor-pointer
-                  hover:text-white transition
-                "
+                className="flex items-start gap-3 cursor-pointer hover:text-white transition"
               >
                 <span className="mt-1 text-indigo-400">
                   <FaPhoneAlt />
@@ -134,10 +137,7 @@ const Contact = () => {
 
               <div
                 onClick={openAddress}
-                className="
-                  flex items-start gap-3 cursor-pointer
-                  hover:text-white transition
-                "
+                className="flex items-start gap-3 cursor-pointer hover:text-white transition"
               >
                 <span className="mt-1 text-indigo-400">
                   <FaMapMarkerAlt />
@@ -148,7 +148,6 @@ const Contact = () => {
                 </p>
               </div>
             </div>
-
           </div>
 
           {/* Right Form */}
@@ -161,6 +160,18 @@ const Contact = () => {
               w-full max-w-lg mx-auto
             "
           >
+            {/* ✅ SUCCESS MESSAGE */}
+            {submitted && (
+              <div className="mb-5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-center">
+                <p className="font-bold text-indigo-900">
+                  Submitted Successfully ✅
+                </p>
+                <p className="text-sm text-indigo-700 mt-1">
+                  Our team will contact you shortly.
+                </p>
+              </div>
+            )}
+
             <form onSubmit={handleSubmit} className="space-y-5">
               <Input
                 label="Full Name"
@@ -231,7 +242,7 @@ const Contact = () => {
                   transition
                 "
               >
-                Submit
+                {submitted ? "Submitted ✅" : "Submit"}
               </button>
 
               <p className="text-xs text-slate-500 text-center pt-2">
