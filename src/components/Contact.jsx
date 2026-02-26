@@ -76,7 +76,6 @@ const Contact = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (loading) return;
 
     if (!isFormValid) {
@@ -88,16 +87,12 @@ const Contact = () => {
       setLoading(true);
 
       const url = import.meta.env.VITE_SCRIPT_URL;
+      if (!url) throw new Error("VITE_SCRIPT_URL missing");
 
-      if (!url) {
-        throw new Error("VITE_SCRIPT_URL is missing in .env");
-      }
-
-      // ✅ CORS SAFE
       const formBody = new URLSearchParams();
-      Object.keys(formData).forEach((key) => {
-        formBody.append(key, formData[key]);
-      });
+      Object.keys(formData).forEach((key) =>
+        formBody.append(key, formData[key])
+      );
       formBody.append("project", "HIREME");
 
       const res = await fetch(url, {
@@ -106,23 +101,13 @@ const Contact = () => {
       });
 
       const text = await res.text();
+      const data = JSON.parse(text);
 
-      let data;
-      try {
-        data = JSON.parse(text);
-      } catch {
-        console.error("Raw response:", text);
-        throw new Error("Invalid JSON response from server");
-      }
+      if (!data.ok) throw new Error("Sheet insert failed");
 
-      if (!data.ok) {
-        throw new Error(data.error || "Sheet insert failed");
-      }
-
-      // ✅ Updated Success Message
       showToast(
         "success",
-        "Thank you! Our team will contact you as soon as possible. ✅"
+        "Thank you! Our team will contact you shortly. ✅"
       );
 
       setFormData({
@@ -135,7 +120,6 @@ const Contact = () => {
 
       setErrors({});
     } catch (err) {
-      console.error(err);
       showToast("error", err.message || "Submission failed");
     } finally {
       setLoading(false);
@@ -144,7 +128,7 @@ const Contact = () => {
 
   const openEmail = () =>
     (window.location.href =
-      "mailto:electronticeducaresales@yarrowtech.co.in");
+      "contact@hireme.com");
 
   const callPhone = () =>
     (window.location.href = "tel:+919830590929");
@@ -157,17 +141,19 @@ const Contact = () => {
 
   return (
     <>
-      {/* Toast Notification */}
-      <div className="fixed bottom-5 right-5 z-[9999]">
+      {/* Toast */}
+      <div className="fixed bottom-4 right-4 z-[9999] px-4 sm:px-0 w-full sm:w-auto flex justify-end">
         {toast && (
-          <div className="relative overflow-hidden bg-white rounded-2xl px-5 py-4 shadow-[0_20px_50px_rgba(0,0,0,0.2)] border border-black/5 flex items-center gap-3 min-w-[300px] max-w-[400px]">
+          <div className="relative overflow-hidden bg-white rounded-2xl px-5 py-4 shadow-xl border flex items-center gap-3 w-full sm:min-w-[320px] max-w-[95vw]">
             <div
               className={`absolute left-0 top-0 h-full w-1.5 ${
-                toast.type === "success" ? "bg-emerald-500" : "bg-red-500"
+                toast.type === "success"
+                  ? "bg-emerald-500"
+                  : "bg-red-500"
               }`}
             />
             <div
-              className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm shrink-0 ${
+              className={`w-9 h-9 rounded-lg flex items-center justify-center font-bold text-sm ${
                 toast.type === "success"
                   ? "bg-emerald-50 text-emerald-600"
                   : "bg-red-50 text-red-600"
@@ -175,7 +161,7 @@ const Contact = () => {
             >
               {toast.type === "success" ? "✓" : "!"}
             </div>
-            <p className="text-[13px] font-medium text-slate-700 leading-snug">
+            <p className="text-[13px] font-medium text-slate-700">
               {toast.msg}
             </p>
           </div>
@@ -184,107 +170,83 @@ const Contact = () => {
 
       <section
         id="contact"
-        className="relative bg-gradient-to-b from-[#0f1c4d] to-[#0b1437] py-20 px-4 sm:px-6"
+        className="bg-gradient-to-b from-[#0f1c4d] to-[#0b1437] py-20 px-4 sm:px-6 overflow-x-hidden"
       >
-        <div className="max-w-6xl mx-auto grid lg:grid-cols-2 gap-12 items-start">
-          {/* LEFT CONTACT INFO */}
+        <div className="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+          
+          {/* LEFT */}
           <div className="space-y-6" data-aos="fade-right">
-            <div>
-              <h3 className="text-3xl sm:text-4xl font-bold text-white mb-2">
-                Get in Touch
-              </h3>
-              <p className="text-white/60 text-base">
-                Have questions? We'd love to hear from you.
-              </p>
-            </div>
+            <h3 className="text-3xl sm:text-4xl font-bold text-white">
+              Get in Touch
+            </h3>
+            <p className="text-white/60">
+              Have questions? We'd love to hear from you.
+            </p>
 
-            <div className="space-y-4 pt-8">
-              <ContactCard
-                icon={Mail}
-                title="Email"
-                value="electronticeducaresales@yarrowtech.co.in"
-                onClick={openEmail}
-              />
-              <ContactCard
-                icon={Phone}
-                title="Phone"
+            <div className="space-y-4 pt-6">
+              <ContactCard icon={Mail} title="Email"
+                value="contact@hireme.com"
+                onClick={openEmail} />
+              <ContactCard icon={Phone} title="Phone"
                 value="+91 98305 90929"
-                onClick={callPhone}
-              />
-              <ContactCard
-                icon={MapPin}
-                title="Office"
+                onClick={callPhone} />
+              <ContactCard icon={MapPin} title="Office"
                 value="3A, Bertram St, Esplanade, Dharmatala, Kolkata"
-                onClick={openAddress}
-              />
+                onClick={openAddress} />
             </div>
           </div>
 
-          {/* FORM CARD */}
+          {/* FORM */}
           <div data-aos="fade-left">
-            <div className="rounded-3xl border border-white/10 bg-gradient-to-br from-white/8 to-white/4 backdrop-blur-2xl p-8 sm:p-10 shadow-[0_20px_60px_rgba(0,0,0,0.3)]">
-              <div className="mb-8">
-                <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white/85 text-[10px] font-bold tracking-widest uppercase px-3.5 py-1.5 rounded-full mb-4">
-                  <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />
-                  Contact
-                </div>
-                <h2 className="text-3xl font-bold text-white mb-2">
-                  Contact us
-                </h2>
-                <p className="text-white/70 text-sm leading-relaxed">
-                  Our team will respond within 24 hours.
-                </p>
-              </div>
+            <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-2xl p-6 sm:p-10 shadow-2xl">
+              
+              <h2 className="text-2xl sm:text-3xl font-bold text-white mb-6">
+                Contact Us
+              </h2>
 
               <form onSubmit={handleSubmit} className="space-y-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <FormField label="Full Name" name="name" type="text"
-                    value={formData.name} onChange={handleChange}
+                  <FormField label="Full Name" name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     error={errors.name} required />
-                  <FormField label="Mobile No" name="mobile" type="tel"
-                    value={formData.mobile} onChange={handleChange}
-                    error={errors.mobile} required inputMode="numeric" />
+                  <FormField label="Mobile No" name="mobile"
+                    value={formData.mobile}
+                    onChange={handleChange}
+                    error={errors.mobile} required />
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
-                  <FormField label="Email Address" name="email" type="email"
-                    value={formData.email} onChange={handleChange}
+                  <FormField label="Email Address" name="email"
+                    type="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     error={errors.email} required />
-                  <FormField label="Company Name" name="company" type="text"
-                    value={formData.company} onChange={handleChange}
+                  <FormField label="Company Name" name="company"
+                    value={formData.company}
+                    onChange={handleChange}
                     error={errors.company} required />
                 </div>
 
-                <div className="flex flex-col gap-2">
-                  <label className="text-xs font-semibold text-white/70 tracking-wide uppercase">
-                    Description
-                  </label>
-                  <textarea
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    placeholder="Describe your requirements (optional)..."
-                    className="w-full min-h-[100px] rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none transition-all duration-300 focus:border-sky-400/50 focus:bg-white/10 focus:ring-2 focus:ring-sky-400/30 resize-none"
-                  />
-                </div>
+                <textarea
+                  name="message"
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Describe your requirements (optional)..."
+                  className="w-full min-h-[100px] rounded-2xl border border-white/15 bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none focus:border-sky-400/50 focus:ring-2 focus:ring-sky-400/30 resize-none"
+                />
 
                 <button
                   type="submit"
                   disabled={!isFormValid || loading}
-                  className={`w-full rounded-2xl py-3.5 text-base font-semibold transition-all duration-300 ${
+                  className={`w-full rounded-2xl py-3.5 text-base font-semibold transition-all duration-300 cursor-pointer ${
                     isFormValid
-                      ? "bg-gradient-to-r from-sky-300 to-sky-500 text-slate-900 shadow-[0_8px_25px_rgba(56,189,248,0.3)] hover:shadow-[0_12px_35px_rgba(56,189,248,0.4)] hover:-translate-y-0.5 active:translate-y-0"
+                      ? "bg-gradient-to-r from-sky-300 to-sky-500 text-slate-900 hover:-translate-y-0.5"
                       : "bg-gray-600/50 text-gray-400 cursor-not-allowed"
                   }`}
                 >
                   {loading ? "Sending..." : "Submit"}
                 </button>
-
-                {!isFormValid && Object.values(errors).some(e => e) && (
-                  <p className="text-xs text-red-400 text-center">
-                    Please fill in all required fields correctly
-                  </p>
-                )}
               </form>
             </div>
           </div>
@@ -297,43 +259,40 @@ const Contact = () => {
 const ContactCard = ({ icon: Icon, title, value, onClick }) => (
   <button
     onClick={onClick}
-    className="w-full text-left bg-white/8 border border-white/12 rounded-2xl p-5 hover:bg-white/12 hover:border-white/20 transition-all duration-300 group"
+    className="w-full text-left bg-white/8 border border-white/12 rounded-2xl p-5 hover:bg-white/12 transition-all duration-300 group cursor-pointer"
   >
     <div className="flex gap-4 items-start">
-      <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-sky-500/20 text-sky-300 group-hover:bg-sky-500/30 transition-all duration-300 shrink-0">
+      <div className="w-10 h-10 flex items-center justify-center rounded-lg bg-sky-500/20 text-sky-300">
         <Icon size={20} />
       </div>
-      <div className="flex-1">
-        <div className="text-xs font-semibold text-white/60 tracking-wide uppercase mb-1">
+      <div className="flex-1 break-words">
+        <div className="text-xs font-semibold text-white/60 uppercase mb-1">
           {title}
         </div>
-        <div className="text-sm text-white font-medium">{value}</div>
+        <div className="text-sm text-white font-medium break-all">
+          {value}
+        </div>
       </div>
     </div>
   </button>
 );
 
-const FormField = ({ label, error, required = false, type = "text", ...props }) => (
+const FormField = ({ label, error, required, type = "text", ...props }) => (
   <div className="flex flex-col gap-2">
-    <label className="text-xs font-semibold text-white/70 tracking-wide uppercase">
-      {label}
-      {required && <span className="text-red-400 ml-1">*</span>}
+    <label className="text-xs font-semibold text-white/70 uppercase">
+      {label} {required && <span className="text-red-400">*</span>}
     </label>
     <input
       type={type}
       required={required}
-      className={`w-full rounded-2xl border bg-white/5 px-4 py-3 text-sm text-white placeholder:text-white/40 outline-none transition-all duration-300 ${
+      className={`w-full rounded-2xl border bg-white/5 px-4 py-3 text-sm text-white outline-none ${
         error
-          ? "border-red-500/50 bg-red-500/5 focus:border-red-500 focus:ring-2 focus:ring-red-500/20"
-          : "border-white/15 focus:border-sky-400/50 focus:bg-white/10 focus:ring-2 focus:ring-sky-400/30"
+          ? "border-red-500 focus:ring-red-400"
+          : "border-white/15 focus:border-sky-400 focus:ring-sky-400"
       }`}
       {...props}
     />
-    {error && (
-      <span className="text-xs text-red-400 font-medium flex items-center gap-1">
-        ⚠ {error}
-      </span>
-    )}
+    {error && <span className="text-xs text-red-400">⚠ {error}</span>}
   </div>
 );
 
