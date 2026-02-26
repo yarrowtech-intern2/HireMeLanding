@@ -1,10 +1,6 @@
-import React, { useEffect, useState } from "react";
-import AOS from "aos";
-import "aos/dist/aos.css";
+import React, { useState } from "react";
 
 const HireMeHero = () => {
-  const [submitted, setSubmitted] = useState(false);
-
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -13,177 +9,189 @@ const HireMeHero = () => {
     message: "",
   });
 
-  useEffect(() => {
-    AOS.init({ duration: 800, once: true, offset: 120 });
-  }, []);
+  const [toast, setToast] = useState(null);
+  const [loading, setLoading] = useState(false);
 
-  const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+  const showToast = (type, msg) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 3500);
   };
 
-  const handleSubmit = (e) => {
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+
+    if (name === "mobile") {
+      const onlyDigits = value.replace(/\D/g, "").slice(0, 10);
+      setFormData({ ...formData, mobile: onlyDigits });
+      return;
+    }
+
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const isFormValid =
+    formData.name.trim() &&
+    /^\d{10}$/.test(formData.mobile) &&
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email) &&
+    formData.company.trim();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    if (loading) return;
 
-    // ✅ show success message (no alert)
-    setSubmitted(true);
+    if (!isFormValid) {
+      showToast("error", "Please fill all required fields correctly.");
+      return;
+    }
 
-    // ✅ clear form
-    setFormData({
-      name: "",
-      mobile: "",
-      email: "",
-      company: "",
-      message: "",
-    });
+    try {
+      setLoading(true);
 
-    // ✅ auto hide message
-    setTimeout(() => setSubmitted(false), 3000);
+      const url = import.meta.env.VITE_SCRIPT_URL;
+      if (!url) throw new Error("VITE_SCRIPT_URL missing");
+
+      // CORS safe submission
+      const formBody = new URLSearchParams();
+      Object.keys(formData).forEach((key) => {
+        formBody.append(key, formData[key]);
+      });
+      formBody.append("project", "HIREME");
+
+      const res = await fetch(url, {
+        method: "POST",
+        body: formBody,
+      });
+
+      const text = await res.text();
+      const data = JSON.parse(text);
+
+      if (!data.ok) throw new Error("Submission failed");
+
+      showToast(
+        "success",
+        "Thank you! Our team will contact you as soon as possible."
+      );
+
+      setFormData({
+        name: "",
+        mobile: "",
+        email: "",
+        company: "",
+        message: "",
+      });
+    } catch (err) {
+      showToast("error", err.message || "Submission failed");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <section
-      id="home"
-      className="
-        relative overflow-hidden
-        bg-gradient-to-b from-[#0f1c4d] to-[#0b1437]
-        text-white
-        pt-24 pb-20
-        sm:pt-28
-      "
-    >
-      {/* Glow */}
-      <div className="absolute inset-0 pointer-events-none flex justify-center">
-        <div className="w-[700px] sm:w-[900px] h-[360px] bg-indigo-500/20 blur-[140px] rounded-full" />
+    <section className="relative min-h-screen flex items-center bg-gradient-to-b from-[#0f1c4d] to-[#0b1437] px-6 py-20">
+
+      {/* Toast */}
+      <div className="fixed bottom-5 right-5 z-[9999]">
+        {toast && (
+          <div className={`px-4 py-3 rounded-xl shadow-lg text-sm ${
+            toast.type === "success" ? "bg-emerald-500 text-white" : "bg-red-500 text-white"
+          }`}>
+            {toast.msg}
+          </div>
+        )}
       </div>
 
-      <div
-        className="
-          relative max-w-7xl mx-auto
-          px-4 sm:px-6 lg:px-16
-          grid grid-cols-1 md:grid-cols-2
-          gap-12 items-start
-          pt-12 sm:pt-16 md:pt-20
-        "
-      >
-        {/* LEFT CONTENT */}
-        <div data-aos="fade-right" className="text-center md:text-left">
-          <p className="text-indigo-300 font-semibold uppercase tracking-wider mb-3 text-sm sm:text-base">
-            Smart Hiring Platform
-          </p>
+      <div className="max-w-7xl mx-auto w-full grid lg:grid-cols-2 gap-16 items-center">
 
-          <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold mb-6 leading-tight">
-            Hire Smarter.
-            <br />
-            <span className="text-indigo-300">Manage Effortlessly.</span>
+        {/* LEFT CONTENT */}
+        <div>
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
+            ● Workforce Management Platform
+          </div>
+
+          <h1 className="text-[48px] font-extrabold text-white leading-tight max-w-xl">
+            Enterprise HR operations,{" "}
+            <span className="text-sky-200 italic">unified</span> and secure.
           </h1>
 
-          <p className="text-indigo-100 text-base sm:text-lg max-w-xl mx-auto md:mx-0 mb-8">
-            Manage your team with confidence using <strong>Hire Me</strong> — an
-            all-in-one platform for subscriptions, HR management, and data-driven
-            insights.
+          <p className="mt-6 text-white/70 max-w-lg">
+            Partner onboarding, subscription control, HR operations, employee
+            records, and analytics — built for reliability, compliance, and enterprise scale.
           </p>
 
-          <ul className="space-y-3 text-indigo-100 text-sm sm:text-base max-w-md mx-auto md:mx-0">
-            <li>✔ Centralized workforce management</li>
-            <li>✔ Secure employee records</li>
-            <li>✔ Real-time analytics & reporting</li>
-          </ul>
+          <div className="mt-10 grid grid-cols-2 gap-4 max-w-lg">
+            {[
+              "Partner verification & approvals",
+              "Subscription access management",
+              "HR dashboard & employee tracking",
+              "Analytics & workforce reporting",
+            ].map((item, i) => (
+              <div key={i} className="bg-white/5 border border-white/10 rounded-xl px-4 py-3 text-white/80 text-sm">
+                ◈ {item}
+              </div>
+            ))}
+          </div>
+
+          <div className="mt-12 flex gap-10 text-white">
+            <div>
+              <div className="text-2xl font-bold">6+</div>
+              <div className="text-xs text-white/50 tracking-widest">MODULES</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold">24/7</div>
+              <div className="text-xs text-white/50 tracking-widest">SUPPORT</div>
+            </div>
+            <div>
+              <div className="text-2xl font-bold">100%</div>
+              <div className="text-xs text-white/50 tracking-widest">SECURE</div>
+            </div>
+          </div>
         </div>
 
-        {/* RIGHT FORM */}
-        <div
-          data-aos="fade-left"
-          className="
-            bg-white text-gray-900
-            rounded-2xl shadow-2xl
-            p-6 sm:p-8 lg:p-10
-            w-full max-w-lg mx-auto
-          "
-        >
-          {/* ✅ SUCCESS MESSAGE */}
-          {submitted && (
-            <div className="mb-5 rounded-xl border border-indigo-200 bg-indigo-50 px-4 py-3 text-center">
-              <p className="font-bold text-indigo-900">
-                Message Sent Successfully ✅
-              </p>
-              <p className="text-sm text-indigo-700 mt-1">
-                Our team will contact you shortly.
-              </p>
-            </div>
-          )}
+        {/* RIGHT FORM CARD */}
+        <div className="rounded-3xl border border-white/10 bg-white/5 backdrop-blur-xl p-8 shadow-xl">
+
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white text-xs font-bold tracking-widest uppercase px-4 py-1.5 rounded-full mb-6">
+            ● Contact
+          </div>
+
+          <h2 className="text-2xl font-bold text-white">Contact us</h2>
+          <p className="text-white/60 text-sm mt-2 mb-6">
+            Our team will respond within 24 hours.
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
-            <Input
-              label="Full Name"
-              name="name"
-              value={formData.name}
-              onChange={handleChange}
-              placeholder="Your full name"
-              autoComplete="name"
-            />
 
-            <Input
-              label="Mobile Number"
-              name="mobile"
-              value={formData.mobile}
-              onChange={handleChange}
-              placeholder="10-digit mobile number"
-              inputMode="numeric"
-              autoComplete="tel"
-            />
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Input label="Full Name" required name="name" value={formData.name} onChange={handleChange} />
+              <Input label="Mobile No" required name="mobile" value={formData.mobile} onChange={handleChange} />
+            </div>
 
-            <Input
-              label="Email Address"
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleChange}
-              placeholder="example@email.com"
-              autoComplete="email"
-            />
+            <div className="grid sm:grid-cols-2 gap-4">
+              <Input label="Email Address" required name="email" value={formData.email} onChange={handleChange} />
+              <Input label="Company Name" required name="company" value={formData.company} onChange={handleChange} />
+            </div>
 
-            <Input
-              label="Company Name"
-              name="company"
-              value={formData.company}
-              onChange={handleChange}
-              placeholder="Company (optional)"
-              required={false}
-            />
-
-            {/* Message */}
             <div>
-              <label className="text-sm font-medium text-gray-700">
+              <label className="text-xs text-white/60 uppercase tracking-wider">
                 Description
               </label>
-              <p className="text-xs text-gray-500 mb-1">
-                Briefly describe your requirement.
-              </p>
               <textarea
                 name="message"
-                rows="4"
-                required
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="Example: HR system for a team of 50 employees"
-                className="
-                  w-full rounded-lg border border-gray-300 px-4 py-3
-                  focus:ring-2 focus:ring-indigo-500 outline-none
-                "
+                placeholder="Describe your requirements (optional)..."
+                className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none"
               />
             </div>
 
             <button
               type="submit"
-              className="
-                w-full bg-indigo-600 text-white py-3 rounded-lg
-                font-semibold
-                hover:bg-indigo-700 hover:shadow-lg
-                transition
-              "
+              disabled={loading}
+              className="w-full py-3 rounded-2xl font-semibold text-[#0b1437] bg-gradient-to-r from-sky-200 to-sky-400 hover:opacity-90 transition"
             >
-              {submitted ? "Sent ✅" : "Send Message"}
+              {loading ? "Submitting..." : "Submit"}
             </button>
+
           </form>
         </div>
       </div>
@@ -191,16 +199,17 @@ const HireMeHero = () => {
   );
 };
 
-const Input = ({ label, required = true, ...props }) => (
+const Input = ({ label, required = false, ...props }) => (
   <div>
-    <label className="text-sm font-medium text-gray-700">{label}</label>
+    <label className="text-xs text-white/60 uppercase tracking-wider">
+      {label}
+      {required && <span className="text-red-400 ml-1">*</span>}
+    </label>
+
     <input
       {...props}
       required={required}
-      className="
-        mt-1 w-full rounded-lg border border-gray-300 px-4 py-3
-        focus:ring-2 focus:ring-indigo-500 outline-none
-      "
+      className="mt-2 w-full rounded-xl border border-white/10 bg-white/5 px-4 py-3 text-white placeholder:text-white/40 focus:outline-none"
     />
   </div>
 );

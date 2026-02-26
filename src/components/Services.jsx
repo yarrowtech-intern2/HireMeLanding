@@ -13,38 +13,32 @@ import {
 const services = [
   {
     title: "Partnership Management",
-    desc:
-      "Companies can apply and get verified as official HireME partners through our rigorous approval process, ensuring system integrity and quality standards.",
+    desc: "Companies can apply and get verified as official HireME partners through our rigorous approval process, ensuring system integrity and quality standards.",
     icon: Handshake,
   },
   {
     title: "Subscription Access",
-    desc:
-      "Flexible subscription plans with transparent pricing to unlock full platform functionality based on your organization’s needs.",
+    desc: "Flexible subscription plans with transparent pricing to unlock full platform functionality based on your organization's needs.",
     icon: CreditCard,
   },
   {
     title: "HR Dashboard",
-    desc:
-      "Comprehensive employee management with real-time tracking, advanced search, document uploads, and status monitoring.",
+    desc: "Comprehensive employee management with real-time tracking, advanced search, document uploads, and status monitoring.",
     icon: LayoutDashboard,
   },
   {
     title: "Admin Control Panel",
-    desc:
-      "Centralized oversight for reviewing applications, monitoring platform usage, and tracking key workforce metrics.",
+    desc: "Centralized oversight for reviewing applications, monitoring platform usage, and tracking key workforce metrics.",
     icon: ShieldCheck,
   },
   {
     title: "Employment Records",
-    desc:
-      "Secure, centralized storage for all employee data including work history, performance metrics, and company associations.",
+    desc: "Secure, centralized storage for all employee data including work history, performance metrics, and company associations.",
     icon: FolderOpen,
   },
   {
     title: "Analytics & Reporting",
-    desc:
-      "Powerful insights into workforce trends, productivity metrics, and HR operational efficiency.",
+    desc: "Powerful insights into workforce trends, productivity metrics, and HR operational efficiency.",
     icon: BarChart3,
   },
 ];
@@ -73,69 +67,92 @@ const Services = () => {
         <div className="w-[700px] sm:w-[900px] h-[360px] bg-indigo-500/20 blur-[140px] rounded-full" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto">
-        <div
-          data-aos="fade-up"
-          className="
-            bg-white/95 rounded-3xl
-            p-6 sm:p-10 lg:p-14
-            shadow-xl
-          "
-        >
-          {/* Title */}
-          <h2
-            className="
-              text-3xl sm:text-4xl
-              font-extrabold text-center
-              bg-gradient-to-r from-[#2563eb] to-[#1e40af]
-              bg-clip-text text-transparent
-            "
-          >
-            Our Services
-          </h2>
+      {/* Grid Pattern */}
+      <div
+        className="
+          absolute inset-0 pointer-events-none opacity-[0.08]
+          [background-image:linear-gradient(rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.22)_1px,transparent_1px)]
+          [background-size:60px_60px]
+        "
+      />
 
-          {/* Service Cards */}
-          <div
-            className="
-              mt-12 sm:mt-14
-              grid grid-cols-1 md:grid-cols-2
-              gap-6 sm:gap-8
-            "
-          >
-            {services.map((item, index) => {
-              const Icon = item.icon;
-              return (
-                <div
-                  key={index}
-                  data-aos="zoom-in"
-                  data-aos-delay={index * 100}
-                  className="
-                    bg-white rounded-2xl p-5 sm:p-6
-                    shadow-md
-                    transition-all duration-300
-                    hover:-translate-y-1 hover:shadow-xl
-                  "
-                >
-                  <div className="flex gap-4 items-start">
-                    <div className="bg-indigo-50 p-3 rounded-xl shrink-0">
-                      <Icon className="text-indigo-600" size={22} />
-                    </div>
-                    <div>
-                      <h3 className="text-blue-800 font-semibold text-base sm:text-lg">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+      <div className="relative max-w-6xl mx-auto">
+        {/* Header */}
+        <div data-aos="fade-up" className="max-w-3xl mx-auto text-center">
+          <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white/85 text-[11px] font-bold tracking-[0.12em] uppercase px-4 py-1.5 rounded-full backdrop-blur">
+            <span className="w-[6px] h-[6px] rounded-full bg-sky-300 animate-pulse" />
+            Our Services
           </div>
 
+          <h2 className="mt-6 text-4xl sm:text-5xl font-extrabold leading-tight text-white">
+            Services built for modern
+            <span className="text-sky-200 italic"> workforce teams</span>
+          </h2>
+
+          <p className="mt-4 text-white/65 text-sm sm:text-base leading-relaxed">
+            HireME gives companies, partners, admins, and HR teams the tools they
+            need to manage subscriptions, employees, compliance, and analytics
+            in one secure system.
+          </p>
         </div>
-      </div>
+
+        {/* Cards */}
+        <div
+          className="
+            mt-14 sm:mt-16
+            grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+            gap-6
+          "
+        >
+          {services.map((item, index) => {
+            const Icon = item.icon;
+            return (
+              <div
+                key={index}
+                data-aos="zoom-in"
+                data-aos-delay={index * 80}
+                className="
+                  group
+                  rounded-3xl
+                  border border-white/10
+                  bg-white/5
+                  backdrop-blur-xl
+                  p-6
+                  shadow-[0_10px_30px_rgba(0,0,0,0.25)]
+                  transition-all duration-300
+                  hover:-translate-y-1 hover:bg-white/10
+                "
+              >
+                {/* Icon */}
+                <div
+                  className="
+                    w-12 h-12
+                    rounded-2xl
+                    bg-white/10
+                    border border-white/15
+                    flex items-center justify-center
+                    text-sky-200
+                    mb-5
+                    transition
+                    group-hover:bg-white/15
+                  "
+                >
+                  <Icon size={22} />
+                </div>
+
+                <h3 className="text-white font-bold text-lg leading-snug">
+                  {item.title}
+                </h3>
+
+                <p className="mt-3 text-white/65 text-sm leading-relaxed">
+                  {item.desc}
+                </p>
+              </div>
+            );
+          })}
+        </div>
+
+        </div>
     </section>
   );
 };

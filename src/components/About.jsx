@@ -90,64 +90,99 @@ const About = () => {
         px-4 sm:px-6
       "
     >
-      {/* Glow */}
+      {/* Glow background (Same as Services) */}
       <div className="absolute inset-0 pointer-events-none flex justify-center">
         <div className="w-[700px] sm:w-[900px] h-[360px] bg-indigo-500/20 blur-[140px] rounded-full" />
       </div>
 
-      <div className="relative max-w-6xl mx-auto space-y-16 sm:space-y-24">
+      {/* Grid Pattern (Same as Services) */}
+      <div
+        className="
+          absolute inset-0 pointer-events-none opacity-[0.08]
+          [background-image:linear-gradient(rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.22)_1px,transparent_1px)]
+          [background-size:60px_60px]
+        "
+      />
 
+      <div className="relative max-w-6xl mx-auto space-y-16 sm:space-y-20">
         {/* ================= MISSION ================= */}
-        <div
-          data-aos="fade-up"
-          className="
-            bg-white/95 rounded-3xl
-            p-6 sm:p-10 lg:p-14
-            shadow-xl
-          "
-        >
-          <h2 className="
-            text-3xl sm:text-4xl
-            font-extrabold text-center
-            bg-gradient-to-r from-[#2563eb] to-[#1e40af]
-            bg-clip-text text-transparent
-          ">
-            Our Mission
-          </h2>
+        <div>
+          {/* Header */}
+          <div data-aos="fade-up" className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white/85 text-[11px] font-bold tracking-[0.12em] uppercase px-4 py-1.5 rounded-full backdrop-blur">
+              <span className="w-[6px] h-[6px] rounded-full bg-sky-300 animate-pulse" />
+              Our Mission
+            </div>
 
-          <div className="
-            mt-12 sm:mt-14
-            grid grid-cols-1 md:grid-cols-2
-            gap-6 sm:gap-8
-          ">
+            <h2 className="mt-6 text-4xl sm:text-5xl font-extrabold leading-tight text-white">
+              Building the future of
+              <span className="text-sky-200 italic"> workforce operations</span>
+            </h2>
+
+            <p className="mt-4 text-white/65 text-sm sm:text-base leading-relaxed">
+              We help organizations modernize HR operations through secure,
+              scalable, and user-friendly workforce management tools.
+            </p>
+          </div>
+
+          {/* Cards */}
+          <div
+            className="
+              mt-14 sm:mt-16
+              grid grid-cols-1 sm:grid-cols-2
+              gap-6
+            "
+          >
             {missionItems.map((item, index) => {
               const Icon = item.icon;
               return (
                 <div
                   key={index}
-                  data-aos="zoom-in"
-                  data-aos-delay={index * 100}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 80}
                   className="
-                    bg-white rounded-2xl
-                    p-5 sm:p-6
-                    shadow-md
+                    group h-full flex flex-col
+                    rounded-3xl
+                    border border-white/10
+                    bg-white/5
+                    backdrop-blur-xl
+                    p-6
+                    shadow-[0_10px_30px_rgba(0,0,0,0.25)]
                     transition-all duration-300
-                    hover:-translate-y-1 hover:shadow-xl
+                    hover:-translate-y-1 hover:bg-white/10
+                    hover:border-sky-400/30
+                    hover:shadow-[0_16px_45px_rgba(0,0,0,0.35)]
                   "
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="bg-indigo-50 p-3 rounded-xl shrink-0">
-                      <Icon className="text-indigo-600" size={22} />
-                    </div>
-                    <div>
-                      <h3 className="text-blue-800 font-semibold text-base sm:text-lg">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
+                  {/* Icon */}
+                  <div
+                    className="
+                      w-12 h-12
+                      rounded-2xl
+                      bg-white/10
+                      border border-white/15
+                      flex items-center justify-center
+                      text-sky-200
+                      mb-5
+                      transition-all duration-300
+                      group-hover:bg-white/15
+                      group-hover:scale-110
+                      group-hover:text-sky-100
+                    "
+                  >
+                    <Icon size={22} />
                   </div>
+
+                  <h3 className="text-white font-bold text-lg leading-snug">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-3 text-white/65 text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+
+                  {/* Bottom subtle line */}
+                  <div className="mt-6 h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                 </div>
               );
             })}
@@ -155,61 +190,88 @@ const About = () => {
         </div>
 
         {/* ================= VISION ================= */}
-        <div
-          data-aos="fade-up"
-          className="
-            bg-white/95 rounded-3xl
-            p-6 sm:p-10 lg:p-14
-            shadow-xl
-          "
-        >
-          <h2 className="text-3xl sm:text-4xl
-            font-extrabold text-center
-            bg-gradient-to-r from-[#2563eb] to-[#1e40af]
-            bg-clip-text text-transparent">
-            Our Vision
-          </h2>
+        <div>
+          {/* Header */}
+          <div data-aos="fade-up" className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white/85 text-[11px] font-bold tracking-[0.12em] uppercase px-4 py-1.5 rounded-full backdrop-blur">
+              <span className="w-[6px] h-[6px] rounded-full bg-sky-300 animate-pulse" />
+              Our Vision
+            </div>
 
+            <h2 className="mt-6 text-4xl sm:text-5xl font-extrabold leading-tight text-white">
+              A smarter, secure and
+              <span className="text-sky-200 italic"> scalable HR ecosystem</span>
+            </h2>
 
-          <div className="
-            mt-12 sm:mt-14
-            grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
-            gap-6 sm:gap-8
-          ">
+            <p className="mt-4 text-white/65 text-sm sm:text-base leading-relaxed">
+              We envision a workforce ecosystem where HR becomes effortless,
+              transparent, and data-driven — empowering organizations to grow.
+            </p>
+          </div>
+
+          {/* Cards */}
+          <div
+            className="
+              mt-14 sm:mt-16
+              grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3
+              gap-6
+            "
+          >
             {visionItems.map((item, index) => {
               const Icon = item.icon;
               return (
                 <div
                   key={index}
-                  data-aos="zoom-in"
-                  data-aos-delay={index * 100}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 80}
                   className="
-                    bg-white rounded-2xl
-                    p-5 sm:p-6
-                    shadow-md
+                    group h-full flex flex-col
+                    rounded-3xl
+                    border border-white/10
+                    bg-white/5
+                    backdrop-blur-xl
+                    p-6
+                    shadow-[0_10px_30px_rgba(0,0,0,0.25)]
                     transition-all duration-300
-                    hover:-translate-y-1 hover:shadow-xl
+                    hover:-translate-y-1 hover:bg-white/10
+                    hover:border-sky-400/30
+                    hover:shadow-[0_16px_45px_rgba(0,0,0,0.35)]
                   "
                 >
-                  <div className="flex items-start gap-4">
-                    <div className="bg-indigo-50 p-3 rounded-xl shrink-0">
-                      <Icon className="text-indigo-600" size={22} />
-                    </div>
-                    <div>
-                      <h3 className="text-indigo-700 font-semibold text-base sm:text-lg">
-                        {item.title}
-                      </h3>
-                      <p className="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-                        {item.desc}
-                      </p>
-                    </div>
+                  {/* Icon */}
+                  <div
+                    className="
+                      w-12 h-12
+                      rounded-2xl
+                      bg-white/10
+                      border border-white/15
+                      flex items-center justify-center
+                      text-sky-200
+                      mb-5
+                      transition-all duration-300
+                      group-hover:bg-white/15
+                      group-hover:scale-110
+                      group-hover:text-sky-100
+                    "
+                  >
+                    <Icon size={22} />
                   </div>
+
+                  <h3 className="text-white font-bold text-lg leading-snug">
+                    {item.title}
+                  </h3>
+
+                  <p className="mt-3 text-white/65 text-sm leading-relaxed">
+                    {item.desc}
+                  </p>
+
+                  {/* Bottom subtle line */}
+                  <div className="mt-6 h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
                 </div>
               );
             })}
           </div>
         </div>
-
       </div>
     </section>
   );

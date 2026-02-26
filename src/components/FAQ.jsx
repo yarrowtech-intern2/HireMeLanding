@@ -58,72 +58,111 @@ const FAQ = () => {
           px-4 sm:px-6
         "
       >
-        {/* Glow */}
+        {/* Glow background */}
         <div className="absolute inset-0 pointer-events-none flex justify-center">
           <div className="w-[700px] sm:w-[900px] h-[360px] bg-indigo-500/20 blur-[140px] rounded-full" />
         </div>
 
+        {/* Grid Pattern */}
+        <div
+          className="
+            absolute inset-0 pointer-events-none opacity-[0.08]
+            [background-image:linear-gradient(rgba(255,255,255,0.22)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.22)_1px,transparent_1px)]
+            [background-size:60px_60px]
+          "
+        />
+
         <div className="relative max-w-6xl mx-auto">
-          <div
-            data-aos="fade-up"
-            className="
-              bg-white/95 rounded-3xl
-              p-6 sm:p-10 lg:p-14
-              shadow-xl
-            "
-          >
-            {/* Title */}
-            <h2
-              className="
-                text-3xl sm:text-4xl
-                font-extrabold text-center
-                bg-gradient-to-r from-[#2563eb] to-[#1e40af]
-                bg-clip-text text-transparent
-              "
-            >
-              Frequently Asked Questions
+          {/* Header */}
+          <div data-aos="fade-up" className="max-w-3xl mx-auto text-center">
+            <div className="inline-flex items-center gap-2 bg-white/10 border border-white/15 text-white/85 text-[11px] font-bold tracking-[0.12em] uppercase px-4 py-1.5 rounded-full backdrop-blur">
+              <span className="w-[6px] h-[6px] rounded-full bg-sky-300 animate-pulse" />
+              FAQ
+            </div>
+
+            <h2 className="mt-6 text-4xl sm:text-5xl font-extrabold leading-tight text-white">
+              Frequently Asked
+              <span className="text-sky-200 italic"> Questions</span>
             </h2>
-            {/* FAQ Items */}
-            <div className="mt-10 sm:mt-14 space-y-4 sm:space-y-6">
-              {faqs.map((item, index) => (
+
+            <p className="mt-4 text-white/65 text-sm sm:text-base leading-relaxed">
+              Quick answers to common questions about onboarding, roles,
+              security, and platform access.
+            </p>
+          </div>
+
+          {/* FAQ Items */}
+          <div className="mt-14 sm:mt-16 max-w-4xl mx-auto space-y-5">
+            {faqs.map((item, index) => {
+              const isOpen = openIndex === index;
+
+              return (
                 <div
                   key={index}
-                  data-aos="zoom-in"
-                  data-aos-delay={index * 100}
+                  data-aos="fade-up"
+                  data-aos-delay={index * 80}
                   className="
-                    bg-white rounded-2xl
-                    p-5 sm:p-6
-                    shadow-md
+                    group
+                    rounded-3xl
+                    border border-white/10
+                    bg-white/5
+                    backdrop-blur-xl
+                    p-6
+                    shadow-[0_10px_30px_rgba(0,0,0,0.25)]
                     transition-all duration-300
-                    hover:shadow-xl
+                    hover:-translate-y-1 hover:bg-white/10
+                    hover:border-sky-400/30
+                    hover:shadow-[0_16px_45px_rgba(0,0,0,0.35)]
                   "
                 >
                   <button
                     onClick={() => toggleFAQ(index)}
                     className="
-                      w-full flex justify-between items-center
+                      w-full flex items-start justify-between gap-5
                       text-left
                       focus:outline-none
                     "
                   >
-                    <h3 className="text-blue-800 font-semibold text-sm sm:text-base">
+                    <h3 className="text-white font-bold text-sm sm:text-base leading-snug pr-2">
                       {item.question}
                     </h3>
 
-                    <span className="text-2xl font-bold text-indigo-600 ml-4">
-                      {openIndex === index ? "−" : "+"}
+                    {/* Plus / Minus */}
+                    <span
+                      className={`
+                        w-11 h-11 shrink-0
+                        rounded-2xl
+                        flex items-center justify-center
+                        border border-white/15
+                        bg-white/10
+                        text-white
+                        text-xl font-bold
+                        transition-all duration-300
+                        ${
+                          isOpen
+                            ? "border-sky-400/30 text-sky-200 bg-white/15"
+                            : ""
+                        }
+                      `}
+                    >
+                      {isOpen ? "−" : "+"}
                     </span>
                   </button>
 
-                  {openIndex === index && (
-                    <p className="mt-4 text-sm sm:text-base text-slate-600 leading-relaxed">
-                      {item.answer}
-                    </p>
+                  {/* Answer */}
+                  {isOpen && (
+                    <div className="mt-4">
+                      <p className="text-white/65 text-sm sm:text-base leading-relaxed">
+                        {item.answer}
+                      </p>
+
+                      {/* Bottom subtle line */}
+                      <div className="mt-6 h-[1px] w-full bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+                    </div>
                   )}
                 </div>
-              ))}
-            </div>
-
+              );
+            })}
           </div>
         </div>
       </section>
